@@ -16,12 +16,16 @@ closeFormButton.addEventListener("click",closeForm);
 addBookButton.addEventListener("click",addBook);
 
 
-function Book(t,a,p,c){
- this.title = t;
- this.author = a;
- this.pages = p;
- this.completed = c;
+
+class Book{
+  constructor (t,a,p,c){
+    this.title =t;
+    this.author = a;
+    this.pages = p;
+    this.completed = c;
+  }
 }
+checkStorage();
 function showForm(){
 overlay.classList.add("unfocused");
 form.classList.add("form-open");
@@ -43,6 +47,7 @@ let book = new Book(title,author,pages,isCompleted);
 bookList.push(book);
 closeForm();
 displayNewBook(book);
+localStorage.setItem("bookList",JSON.stringify(bookList));
 }
 function displayNewBook(book){
 const main = document.querySelector("main");
@@ -72,6 +77,19 @@ bookList[index].completed = (element.innerText=="Yes")?true:false;
 }
 function deleteBook(element,index){
 bookList.splice(index,1);
+localStorage.setItem("bookList",JSON.stringify(bookList));
 const bookGone = element.closest(".books");
 bookGone.remove();
+}
+function checkStorage(){
+  bookList = JSON.parse(localStorage.getItem("bookList"));
+  if(bookList==null){
+    bookList = [];
+    return ;
+  }
+  bookList.forEach((book)=>{
+    displayNewBook(book);
+  })
+
+  
 }
